@@ -1,0 +1,9 @@
+# Ignore generated SQLite and JSON data to preserve live edits on server
+data/*.sqlite
+data/*.sqlite-journal
+data/*.json
+
+# Node / OS files
+.DS_Store
+Thumbs.db
+node_modules/
