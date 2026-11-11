@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Raka Adiputra, S.Kom. — Official Portal</title>
-    <!-- Google Fonts: Plus Jakarta Sans -->
+    <title>Raka Adiputra, S.Kom. — Official Portal (Neumorphic Mode)</title>
+    <!-- Google Fonts: Lato (HKTI) & Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,354 +18,408 @@
                 extend: {
                     fontFamily: {
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        lato: ['"Lato"', 'sans-serif'],
                     },
                     colors: {
-                        darkbg: '#0c0d11',
-                        darkcard: '#14151b',
-                        darkcardhover: '#1b1c24',
-                        darkborder: '#21222c',
+                        neu: {
+                            light: '#ecf0f3',
+                            dark: '#181920',
+                        }
                     }
                 }
             }
         }
     </script>
     <style>
-        .ambient-glow {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            background: 
-                radial-gradient(ellipse at 50% -10%, rgba(16, 185, 129, 0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 50% 110%, rgba(99, 102, 241, 0.05) 0%, transparent 60%);
-            z-index: 0;
+        :root {
+            --neu-bg: #ecf0f3;
+            --neu-card-shadow: 14px 14px 28px #c5cbd3, -14px -14px 28px #ffffff;
+            --neu-flat: 6px 6px 14px #cbccd1, -6px -6px 14px #ffffff;
+            --neu-flat-hover: 8px 8px 18px #b8b9be, -8px -8px 18px #ffffff;
+            --neu-inset: inset 4px 4px 8px #cbccd1, inset -4px -4px 8px #ffffff;
+            --neu-inset-sm: inset 2px 2px 5px #cbccd1, inset -2px -2px 5px #ffffff;
+            --neu-avatar-shadow: 0px 0px 0px 5px #ecf0f3, 8px 8px 16px #a7aaaf, -8px -8px 16px #ffffff;
+        }
+
+        html.dark {
+            --neu-bg: #181920;
+            --neu-card-shadow: 14px 14px 30px #0e0f14, -14px -14px 30px #22232c;
+            --neu-flat: 6px 6px 14px #101116, -6px -6px 14px #22232d;
+            --neu-flat-hover: 8px 8px 18px #0d0e12, -8px -8px 18px #262734;
+            --neu-inset: inset 4px 4px 8px #0f1015, inset -4px -4px 8px #23242e;
+            --neu-inset-sm: inset 2px 2px 5px #0f1015, inset -2px -2px 5px #23242e;
+            --neu-avatar-shadow: 0px 0px 0px 5px #181920, 8px 8px 16px #0e0f14, -8px -8px 16px #242530;
+        }
+
+        body {
+            background-color: var(--neu-bg);
+            transition: background-color 0.3s ease;
+        }
+
+        .neu-container {
+            background-color: var(--neu-bg);
+            border-radius: 40px;
+            box-shadow: var(--neu-card-shadow);
+        }
+
+        .neu-card {
+            background-color: var(--neu-bg);
+            box-shadow: var(--neu-flat);
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .neu-card:hover {
+            box-shadow: var(--neu-flat-hover);
+        }
+        .neu-card:active {
+            box-shadow: var(--neu-inset);
+            transform: scale(0.985);
+        }
+
+        .neu-inset {
+            background-color: var(--neu-bg);
+            box-shadow: var(--neu-inset);
+        }
+        .neu-inset-sm {
+            background-color: var(--neu-bg);
+            box-shadow: var(--neu-inset-sm);
+        }
+
+        .neu-btn-round {
+            background-color: var(--neu-bg);
+            box-shadow: var(--neu-flat);
+            transition: all 0.2s ease;
+        }
+        .neu-btn-round:hover {
+            box-shadow: var(--neu-flat-hover);
+            transform: translateY(-1px);
+        }
+        .neu-btn-round:active {
+            box-shadow: var(--neu-inset);
+            transform: translateY(1px);
+        }
+
+        .neu-avatar {
+            box-shadow: var(--neu-avatar-shadow);
         }
     </style>
 </head>
-<body class="bg-slate-100 dark:bg-darkbg text-slate-800 dark:text-zinc-100 font-sans transition-colors duration-300 min-h-screen flex flex-col justify-between py-6 px-4 sm:px-6 relative selection:bg-emerald-500/20 selection:text-emerald-400">
+<body class="text-slate-700 dark:text-zinc-200 font-sans min-h-screen flex flex-col justify-between py-8 px-4 sm:px-6 relative selection:bg-emerald-500/20 selection:text-emerald-500">
 
-    <div class="ambient-glow"></div>
-
-    <!-- MAIN CONTAINER -->
-    <div class="w-full max-w-[460px] mx-auto relative z-10 flex flex-col items-center flex-grow">
+    <div class="neu-container w-full max-w-[430px] mx-auto p-6 sm:p-8 flex flex-col items-center flex-grow">
         
         <!-- TOP NAVIGATION BAR -->
         <header class="w-full flex items-center justify-between mb-7">
-            <!-- Status Badge -->
-            <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-white/80 dark:bg-darkcard border border-slate-200 dark:border-darkborder shadow-sm backdrop-blur-md">
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span class="text-slate-700 dark:text-zinc-300 text-[11px] font-semibold">Available for Projects</span>
+            <div class="neu-inset-sm inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-lato font-bold">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="text-slate-600 dark:text-zinc-300 text-[11px]">Available for Projects</span>
             </div>
 
-            <!-- Action Controls -->
-            <div class="flex items-center gap-2">
-                <button onclick="handleShare()" aria-label="Share Link" class="w-8 h-8 rounded-full bg-white/80 dark:bg-darkcard border border-slate-200 dark:border-darkborder text-slate-500 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-all flex items-center justify-center shadow-sm">
-                    <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
+            <div class="flex items-center gap-3">
+                <button onclick="handleShare()" aria-label="Share Link" class="neu-btn-round w-9 h-9 rounded-full text-slate-500 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center justify-center">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/><line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/></svg>
                 </button>
 
-                <button id="themeToggleBtn" aria-label="Toggle Theme" class="w-8 h-8 rounded-full bg-white/80 dark:bg-darkcard border border-slate-200 dark:border-darkborder text-slate-500 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 transition-all flex items-center justify-center shadow-sm">
-                    <svg id="sunIcon" class="w-3.5 h-3.5 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
-                    <svg id="moonIcon" class="w-3.5 h-3.5 block dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
+                <button id="themeToggleBtn" aria-label="Toggle Theme" class="neu-btn-round w-9 h-9 rounded-full text-slate-500 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center justify-center">
+                    <svg id="sunIcon" class="w-4 h-4 hidden dark:block text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/></svg>
+                    <svg id="moonIcon" class="w-4 h-4 block dark:hidden text-indigo-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
                 </button>
             </div>
         </header>
 
-        <!-- PROFILE HEADER SECTION -->
+        <!-- PROFILE HEADER -->
         <section class="w-full flex flex-col items-center text-center mb-7">
-            <div class="relative mb-4">
-                <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-b from-slate-200 to-slate-300 dark:from-zinc-700 dark:to-zinc-800 shadow-xl">
-                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover rounded-full bg-zinc-800">
+            <div class="relative mb-5">
+                <div class="neu-avatar w-24 h-24 rounded-full p-1 flex items-center justify-center">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover rounded-full">
                 </div>
-                <div class="absolute bottom-1 right-1 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shadow-md border-2 border-white dark:border-darkbg">
+                <div class="absolute bottom-1 right-1 w-6 h-6 bg-emerald-500 rounded-full flex items-center justify-center shadow-md border-2 border-[#ecf0f3] dark:border-[#181920]">
                     <svg class="w-3.5 h-3.5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                 </div>
             </div>
 
-            <h1 class="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mb-1">Raka Adiputra, S.Kom.</h1>
-            <p class="text-xs sm:text-sm font-medium text-slate-500 dark:text-zinc-400 mb-2">Full-Stack Developer</p>
+            <h1 class="text-xl sm:text-2xl font-lato font-black tracking-wide text-slate-800 dark:text-white mb-1.5">Raka Adiputra, S.Kom.</h1>
+            <p class="text-xs sm:text-sm font-semibold text-emerald-600 dark:text-emerald-400 mb-2">Full-Stack Developer</p>
 
-            <div class="inline-flex items-center gap-1 text-[11px] text-slate-400 dark:text-zinc-500 mb-3">
-                <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+            <div class="inline-flex items-center gap-1.5 text-[11px] text-slate-500 dark:text-zinc-400 mb-3.5 font-medium">
+                <svg class="w-3.5 h-3.5 text-slate-400 dark:text-zinc-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
                 <span>Jakarta, Indonesia • GMT+7</span>
             </div>
 
-            <p class="text-xs text-slate-600 dark:text-zinc-400 max-w-sm leading-relaxed px-2 font-normal">
+            <p class="text-xs text-slate-500 dark:text-zinc-400 max-w-sm leading-relaxed px-1 font-normal">
                 Saya merancang dan membangun produk digital end-to-end — dari arsitektur backend sampai detail antarmuka. Terbuka untuk kolaborasi jangka panjang.
             </p>
         </section>
 
-        <!-- LINKS & INTERACTIVE CARDS -->
-        <main class="w-full flex flex-col gap-3 mb-8">
+        <!-- LINKS -->
+        <main class="w-full flex flex-col gap-3.5 mb-8">
 
-            <!-- SPECIAL FEATURED CARD: SISTEM & APLIKASI (Opens Modal) -->
-            <button onclick="openAppsModal()" class="w-full group text-left relative overflow-hidden rounded-2xl p-4 bg-white dark:bg-darkcard border border-emerald-500/40 dark:border-emerald-500/30 hover:border-emerald-500/70 dark:hover:border-emerald-500/60 transition-all duration-300 shadow-sm hover:shadow-md">
+            <button onclick="openAppsModal()" class="neu-card w-full text-left rounded-3xl p-4 sm:p-4.5 border border-emerald-500/30">
                 <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 dark:bg-emerald-500/20 text-emerald-500 flex items-center justify-center shrink-0">
-                            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
+                    <div class="flex items-center gap-3.5">
+                        <div class="neu-inset-sm w-11 h-11 rounded-2xl text-emerald-500 flex items-center justify-center shrink-0">
+                            <svg class="w-5 h-5 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/></svg>
                         </div>
                         <div>
-                            <div class="flex items-center gap-2">
-                                <h3 class="text-sm font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">
-                                    Aplikasi & Sistem Saya
-                                </h3>
-                            </div>
+                            <h3 class="text-sm font-lato font-bold text-slate-800 dark:text-white">
+                                Aplikasi & Sistem Saya
+                            </h3>
                             <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5">
                                 Kumpulan web app & sistem yang sudah live
                             </p>
                         </div>
                     </div>
-                    <div class="w-7 h-7 rounded-full bg-slate-100 dark:bg-zinc-800/80 flex items-center justify-center text-slate-400 dark:text-zinc-400 group-hover:text-emerald-500 group-hover:translate-x-0.5 transition-all shrink-0">
-                        <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+                    <div class="neu-inset-sm w-8 h-8 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-400 shrink-0">
+                        <svg class="w-4 h-4 text-emerald-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                     </div>
                 </div>
 
-                <div class="flex items-center justify-between pt-2.5 border-t border-slate-100 dark:border-darkborder/70 text-[11px]">
+                <div class="flex items-center justify-between pt-3 border-t border-slate-300/40 dark:border-zinc-800/80 text-[11px]">
                     <div class="flex items-center gap-1.5">
-                        <span class="w-5 h-5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 text-[10px] font-bold flex items-center justify-center border border-slate-200 dark:border-zinc-700/60">K</span>
-                        <span class="w-5 h-5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 text-[10px] font-bold flex items-center justify-center border border-slate-200 dark:border-zinc-700/60">S</span>
-                        <span class="w-5 h-5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 text-[10px] font-bold flex items-center justify-center border border-slate-200 dark:border-zinc-700/60">J</span>
-                        <span class="w-5 h-5 rounded-md bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-400 text-[10px] font-bold flex items-center justify-center border border-slate-200 dark:border-zinc-700/60">T</span>
+                        <span class="neu-inset-sm w-6 h-6 rounded-lg text-slate-700 dark:text-zinc-300 text-[10px] font-lato font-bold flex items-center justify-center">K</span>
+                        <span class="neu-inset-sm w-6 h-6 rounded-lg text-slate-700 dark:text-zinc-300 text-[10px] font-lato font-bold flex items-center justify-center">S</span>
+                        <span class="neu-inset-sm w-6 h-6 rounded-lg text-slate-700 dark:text-zinc-300 text-[10px] font-lato font-bold flex items-center justify-center">J</span>
+                        <span class="neu-inset-sm w-6 h-6 rounded-lg text-slate-700 dark:text-zinc-300 text-[10px] font-lato font-bold flex items-center justify-center">T</span>
                     </div>
-                    <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-500/10 text-emerald-500 border border-emerald-500/30">
+                    <div class="neu-inset-sm inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
                         <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
                         <span>4 Web App Live</span>
                     </div>
                 </div>
             </button>
 
-            <!-- LINKS -->
-            <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="w-full group block rounded-2xl p-3.5 bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder hover:border-slate-300 dark:hover:border-zinc-700 hover:bg-slate-50/80 dark:hover:bg-darkcardhover transition-all duration-200 shadow-sm">
+            <!-- Links Cards -->
+            <a href="https://wa.me/6281234567890" target="_blank" rel="noopener noreferrer" class="neu-card w-full block rounded-3xl p-3.5">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-zinc-800/80 text-emerald-500 flex items-center justify-center shrink-0">
+                    <div class="flex items-center gap-3.5 overflow-hidden">
+                        <div class="neu-inset-sm w-11 h-11 rounded-2xl text-emerald-500 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
                         </div>
                         <div class="overflow-hidden">
-                            <h3 class="text-xs font-semibold text-slate-800 dark:text-zinc-200 group-hover:text-emerald-500 transition-colors truncate">WhatsApp</h3>
-                            <p class="text-[11px] text-slate-400 dark:text-zinc-500 mt-0.5 truncate font-normal">Chat langsung — respon cepat</p>
+                            <h3 class="text-xs font-lato font-bold text-slate-800 dark:text-zinc-100 truncate">WhatsApp</h3>
+                            <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5 truncate font-normal">Chat langsung — respon cepat</p>
                         </div>
                     </div>
-                    <div class="text-slate-400 dark:text-zinc-500 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-2">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                    <div class="neu-inset-sm w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-500 shrink-0 ml-2">
+                        <svg class="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                     </div>
                 </div>
             </a>
 
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-full group block rounded-2xl p-3.5 bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder hover:border-slate-300 dark:hover:border-zinc-700 hover:bg-slate-50/80 dark:hover:bg-darkcardhover transition-all duration-200 shadow-sm">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="neu-card w-full block rounded-3xl p-3.5">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-zinc-800/80 text-blue-500 flex items-center justify-center shrink-0">
+                    <div class="flex items-center gap-3.5 overflow-hidden">
+                        <div class="neu-inset-sm w-11 h-11 rounded-2xl text-blue-500 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
                         </div>
                         <div class="overflow-hidden">
-                            <h3 class="text-xs font-semibold text-slate-800 dark:text-zinc-200 group-hover:text-emerald-500 transition-colors truncate">LinkedIn</h3>
-                            <p class="text-[11px] text-slate-400 dark:text-zinc-500 mt-0.5 truncate font-normal">Profil profesional & pengalaman</p>
+                            <h3 class="text-xs font-lato font-bold text-slate-800 dark:text-zinc-100 truncate">LinkedIn</h3>
+                            <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5 truncate font-normal">Profil profesional & pengalaman</p>
                         </div>
                     </div>
-                    <div class="text-slate-400 dark:text-zinc-500 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-2">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                    <div class="neu-inset-sm w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-500 shrink-0 ml-2">
+                        <svg class="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                     </div>
                 </div>
             </a>
 
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="w-full group block rounded-2xl p-3.5 bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder hover:border-slate-300 dark:hover:border-zinc-700 hover:bg-slate-50/80 dark:hover:bg-darkcardhover transition-all duration-200 shadow-sm">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="neu-card w-full block rounded-3xl p-3.5">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-zinc-800/80 text-slate-700 dark:text-zinc-300 flex items-center justify-center shrink-0">
+                    <div class="flex items-center gap-3.5 overflow-hidden">
+                        <div class="neu-inset-sm w-11 h-11 rounded-2xl text-slate-700 dark:text-zinc-300 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
                         </div>
                         <div class="overflow-hidden">
-                            <h3 class="text-xs font-semibold text-slate-800 dark:text-zinc-200 group-hover:text-emerald-500 transition-colors truncate">GitHub Repositories</h3>
-                            <p class="text-[11px] text-slate-400 dark:text-zinc-500 mt-0.5 truncate font-normal">Kode sumber & eksperimen terbuka</p>
+                            <h3 class="text-xs font-lato font-bold text-slate-800 dark:text-zinc-100 truncate">GitHub Repositories</h3>
+                            <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5 truncate font-normal">Kode sumber & eksperimen terbuka</p>
                         </div>
                     </div>
-                    <div class="text-slate-400 dark:text-zinc-500 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-2">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                    <div class="neu-inset-sm w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-500 shrink-0 ml-2">
+                        <svg class="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                     </div>
                 </div>
             </a>
 
-            <a href="https://credly.com" target="_blank" rel="noopener noreferrer" class="w-full group block rounded-2xl p-3.5 bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder hover:border-slate-300 dark:hover:border-zinc-700 hover:bg-slate-50/80 dark:hover:bg-darkcardhover transition-all duration-200 shadow-sm">
+            <a href="https://credly.com" target="_blank" rel="noopener noreferrer" class="neu-card w-full block rounded-3xl p-3.5">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-zinc-800/80 text-amber-500 flex items-center justify-center shrink-0">
+                    <div class="flex items-center gap-3.5 overflow-hidden">
+                        <div class="neu-inset-sm w-11 h-11 rounded-2xl text-amber-500 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
                         </div>
                         <div class="overflow-hidden">
-                            <h3 class="text-xs font-semibold text-slate-800 dark:text-zinc-200 group-hover:text-emerald-500 transition-colors truncate">Credly Certificates</h3>
-                            <p class="text-[11px] text-slate-400 dark:text-zinc-500 mt-0.5 truncate font-normal">Sertifikat & badge terverifikasi</p>
+                            <h3 class="text-xs font-lato font-bold text-slate-800 dark:text-zinc-100 truncate">Credly Certificates</h3>
+                            <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5 truncate font-normal">Sertifikat & badge terverifikasi</p>
                         </div>
                     </div>
-                    <div class="text-slate-400 dark:text-zinc-500 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-2">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                    <div class="neu-inset-sm w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-500 shrink-0 ml-2">
+                        <svg class="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                     </div>
                 </div>
             </a>
 
-            <a href="mailto:raka@adiputra.dev" class="w-full group block rounded-2xl p-3.5 bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder hover:border-slate-300 dark:hover:border-zinc-700 hover:bg-slate-50/80 dark:hover:bg-darkcardhover transition-all duration-200 shadow-sm">
+            <a href="mailto:raka@adiputra.dev" class="neu-card w-full block rounded-3xl p-3.5">
                 <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-3 overflow-hidden">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-zinc-800/80 text-indigo-400 flex items-center justify-center shrink-0">
+                    <div class="flex items-center gap-3.5 overflow-hidden">
+                        <div class="neu-inset-sm w-11 h-11 rounded-2xl text-indigo-400 flex items-center justify-center shrink-0">
                             <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
                         </div>
                         <div class="overflow-hidden">
-                            <h3 class="text-xs font-semibold text-slate-800 dark:text-zinc-200 group-hover:text-emerald-500 transition-colors truncate">Email</h3>
-                            <p class="text-[11px] text-slate-400 dark:text-zinc-500 mt-0.5 truncate font-normal">raka@adiputra.dev</p>
+                            <h3 class="text-xs font-lato font-bold text-slate-800 dark:text-zinc-100 truncate">Email</h3>
+                            <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5 truncate font-normal">raka@adiputra.dev</p>
                         </div>
                     </div>
-                    <div class="text-slate-400 dark:text-zinc-500 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0 ml-2">
-                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                    <div class="neu-inset-sm w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-500 shrink-0 ml-2">
+                        <svg class="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                     </div>
                 </div>
             </a>
 
         </main>
 
-        <!-- CIRCULAR SOCIAL BUTTONS ROW (Tombol Bulat Sosmed) -->
-        <div class="w-full flex items-center justify-center gap-3 mb-7">
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram" class="w-10 h-10 rounded-full bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder text-slate-600 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-500/40 hover:scale-110 transition-all duration-200 flex items-center justify-center shadow-sm">
+        <!-- CIRCULAR SOCIAL BUTTONS ROW -->
+        <div class="w-full flex items-center justify-center gap-3.5 mb-7 flex-wrap">
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" title="Instagram" class="neu-btn-round w-11 h-11 rounded-full text-slate-600 dark:text-zinc-300 hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center justify-center">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
             </a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="GitHub" class="w-10 h-10 rounded-full bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder text-slate-600 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-500/40 hover:scale-110 transition-all duration-200 flex items-center justify-center shadow-sm">
+            <a href="https://github.com" target="_blank" rel="noopener noreferrer" title="GitHub" class="neu-btn-round w-11 h-11 rounded-full text-slate-600 dark:text-zinc-300 hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center justify-center">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="w-10 h-10 rounded-full bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder text-slate-600 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-500/40 hover:scale-110 transition-all duration-200 flex items-center justify-center shadow-sm">
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" title="LinkedIn" class="neu-btn-round w-11 h-11 rounded-full text-slate-600 dark:text-zinc-300 hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center justify-center">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
             </a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" title="YouTube" class="w-10 h-10 rounded-full bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder text-slate-600 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-500/40 hover:scale-110 transition-all duration-200 flex items-center justify-center shadow-sm">
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" title="YouTube" class="neu-btn-round w-11 h-11 rounded-full text-slate-600 dark:text-zinc-300 hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center justify-center">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
             </a>
-            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" title="TikTok" class="w-10 h-10 rounded-full bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder text-slate-600 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-500/40 hover:scale-110 transition-all duration-200 flex items-center justify-center shadow-sm">
+            <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" title="TikTok" class="neu-btn-round w-11 h-11 rounded-full text-slate-600 dark:text-zinc-300 hover:text-emerald-500 dark:hover:text-emerald-400 flex items-center justify-center">
                 <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-2.88 2.5 2.89 2.89 0 0 1-2.89-2.89 2.89 2.89 0 0 1 2.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 0 0-.79-.05 6.34 6.34 0 0 0-6.34 6.34 6.34 6.34 0 0 0 6.34 6.34 6.34 6.34 0 0 0 6.33-6.34V9.37a8.21 8.21 0 0 0 4.77 1.52V7.45a4.85 4.85 0 0 1-1-.76z"/></svg>
             </a>
         </div>
 
         <!-- FOOTER -->
-        <footer class="w-full text-center py-4 border-t border-slate-200/60 dark:border-darkborder/60 mt-auto">
-            <p class="text-[11px] text-slate-400 dark:text-zinc-500">
-                &copy; 2026 <span class="font-medium text-slate-600 dark:text-zinc-400">Raka Adiputra, S.Kom.</span>. Dirancang & dibangun sendiri.
+        <footer class="w-full text-center py-4 border-t border-slate-300/40 dark:border-zinc-800/80 mt-auto">
+            <p class="text-[11px] text-slate-500 dark:text-zinc-400 font-lato font-bold">
+                &copy; 2026 <span class="text-slate-800 dark:text-white">Raka Adiputra, S.Kom.</span>. All rights reserved.
             </p>
         </footer>
 
     </div>
 
-    <!-- MODAL APPS -->
-    <div id="appsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/70 dark:bg-black/80 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-200">
-        <div id="appsModalCard" class="w-full max-w-[460px] max-h-[85vh] flex flex-col bg-white dark:bg-[#161720] border border-slate-200 dark:border-darkborder rounded-3xl shadow-2xl overflow-hidden scale-95 transition-transform duration-200">
+    <!-- MODAL -->
+    <div id="appsModal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm opacity-0 pointer-events-none transition-opacity duration-200">
+        <div id="appsModalCard" class="neu-container w-full max-w-[430px] max-h-[85vh] flex flex-col p-6 overflow-hidden scale-95 transition-transform duration-200 border border-slate-300/30 dark:border-zinc-800">
             
-            <div class="p-5 border-b border-slate-100 dark:border-darkborder flex items-start justify-between shrink-0">
+            <div class="pb-4 border-b border-slate-300/40 dark:border-zinc-800 flex items-start justify-between shrink-0">
                 <div>
-                    <h2 class="text-base font-bold text-slate-900 dark:text-white">Aplikasi & Sistem Saya</h2>
-                    <p class="text-[11px] text-slate-400 dark:text-zinc-400 mt-0.5">4 web app live yang saya bangun & kelola sendiri.</p>
+                    <h2 class="text-base font-lato font-black text-slate-800 dark:text-white">Aplikasi & Sistem Saya</h2>
+                    <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-0.5">4 web app live yang saya bangun & kelola.</p>
                 </div>
-                <button onclick="closeAppsModal()" aria-label="Tutup Modal" class="p-1.5 rounded-full text-slate-400 hover:text-slate-600 dark:hover:text-white bg-slate-100 dark:bg-zinc-800 hover:bg-slate-200 dark:hover:bg-zinc-700 transition-colors">
+                <button onclick="closeAppsModal()" aria-label="Tutup Modal" class="neu-btn-round w-8 h-8 rounded-full text-slate-400 hover:text-slate-700 dark:hover:text-white flex items-center justify-center">
                     <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/></svg>
                 </button>
             </div>
 
-            <div class="px-5 py-3 border-b border-slate-100 dark:border-darkborder/60 shrink-0 flex items-center gap-2 overflow-x-auto scrollbar-none">
-                <button class="px-3 py-1 rounded-full text-[11px] font-semibold bg-emerald-500/15 text-emerald-500 border border-emerald-500/30 transition-all shrink-0">
+            <div class="py-3 border-b border-slate-300/40 dark:border-zinc-800 shrink-0 flex items-center gap-2 overflow-x-auto scrollbar-none">
+                <button class="cat-pill active neu-inset-sm px-3.5 py-1.5 rounded-full text-[11px] font-lato font-bold text-emerald-600 dark:text-emerald-400 shrink-0">
                     Semua · 4
                 </button>
-                <button class="px-3 py-1 rounded-full text-[11px] font-medium bg-slate-100 dark:bg-zinc-800/80 text-slate-600 dark:text-zinc-400 border border-transparent hover:border-slate-300 dark:hover:border-zinc-700 transition-all shrink-0">
+                <button class="cat-pill neu-btn-round px-3.5 py-1.5 rounded-full text-[11px] font-lato font-bold text-slate-600 dark:text-zinc-400 shrink-0">
                     Produk
                 </button>
-                <button class="px-3 py-1 rounded-full text-[11px] font-medium bg-slate-100 dark:bg-zinc-800/80 text-slate-600 dark:text-zinc-400 border border-transparent hover:border-slate-300 dark:hover:border-zinc-700 transition-all shrink-0">
+                <button class="cat-pill neu-btn-round px-3.5 py-1.5 rounded-full text-[11px] font-lato font-bold text-slate-600 dark:text-zinc-400 shrink-0">
                     Internal
                 </button>
             </div>
 
-            <div class="p-4 overflow-y-auto space-y-2.5 flex-grow">
-                <a href="https://example.com/kasirku" target="_blank" rel="noopener noreferrer" class="app-card group block p-3.5 rounded-2xl bg-slate-50/80 dark:bg-darkcard border border-slate-200/80 dark:border-darkborder hover:border-emerald-500/40 dark:hover:border-emerald-500/40 hover:bg-white dark:hover:bg-darkcardhover transition-all">
+            <div class="py-4 overflow-y-auto space-y-3 flex-grow">
+                <a href="https://example.com/kasirku" target="_blank" rel="noopener noreferrer" class="app-card neu-card block p-3.5 rounded-2xl">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3 overflow-hidden">
-                            <div class="w-9 h-9 rounded-xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60 text-emerald-500 flex items-center justify-center shrink-0">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>
+                            <div class="neu-inset-sm w-10 h-10 rounded-xl text-emerald-500 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7"/><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4"/><path d="M2 7h20"/></svg>
                             </div>
                             <div class="overflow-hidden">
                                 <div class="flex items-center gap-2">
-                                    <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">KasirKu</h4>
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-mono text-slate-400 dark:text-zinc-400 bg-slate-200/50 dark:bg-zinc-800">POS & Kasir</span>
+                                    <h4 class="text-xs font-lato font-bold text-slate-800 dark:text-white">KasirKu</h4>
+                                    <span class="neu-inset-sm px-2 py-0.5 rounded text-[10px] font-mono font-medium text-slate-600 dark:text-zinc-300">POS & Kasir</span>
                                 </div>
                                 <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-1 truncate">
                                     Sistem kasir multi-outlet dengan laporan penjualan real-time.
                                 </p>
                             </div>
                         </div>
-                        <div class="text-slate-400 dark:text-zinc-500 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        <div class="neu-inset-sm w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-500 shrink-0">
+                            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                         </div>
                     </div>
                 </a>
 
-                <a href="https://example.com/sihadir" target="_blank" rel="noopener noreferrer" class="app-card group block p-3.5 rounded-2xl bg-slate-50/80 dark:bg-darkcard border border-slate-200/80 dark:border-darkborder hover:border-emerald-500/40 dark:hover:border-emerald-500/40 hover:bg-white dark:hover:bg-darkcardhover transition-all">
+                <a href="https://example.com/sihadir" target="_blank" rel="noopener noreferrer" class="app-card neu-card block p-3.5 rounded-2xl">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3 overflow-hidden">
-                            <div class="w-9 h-9 rounded-xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60 text-emerald-500 flex items-center justify-center shrink-0">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
+                            <div class="neu-inset-sm w-10 h-10 rounded-xl text-emerald-500 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
                             </div>
                             <div class="overflow-hidden">
                                 <div class="flex items-center gap-2">
-                                    <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">SiHadir</h4>
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-mono text-slate-400 dark:text-zinc-400 bg-slate-200/50 dark:bg-zinc-800">HR & Absensi</span>
+                                    <h4 class="text-xs font-lato font-bold text-slate-800 dark:text-white">SiHadir</h4>
+                                    <span class="neu-inset-sm px-2 py-0.5 rounded text-[10px] font-mono font-medium text-slate-600 dark:text-zinc-300">HR & Absensi</span>
                                 </div>
                                 <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-1 truncate">
                                     Absensi QR + geofencing untuk 200+ karyawan lapangan.
                                 </p>
                             </div>
                         </div>
-                        <div class="text-slate-400 dark:text-zinc-500 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        <div class="neu-inset-sm w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-500 shrink-0">
+                            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                         </div>
                     </div>
                 </a>
 
-                <a href="https://example.com/jurnaltim" target="_blank" rel="noopener noreferrer" class="app-card group block p-3.5 rounded-2xl bg-slate-50/80 dark:bg-darkcard border border-slate-200/80 dark:border-darkborder hover:border-emerald-500/40 dark:hover:border-emerald-500/40 hover:bg-white dark:hover:bg-darkcardhover transition-all">
+                <a href="https://example.com/jurnaltim" target="_blank" rel="noopener noreferrer" class="app-card neu-card block p-3.5 rounded-2xl">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3 overflow-hidden">
-                            <div class="w-9 h-9 rounded-xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60 text-emerald-500 flex items-center justify-center shrink-0">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5v11"/><path d="M12 5v6"/><path d="M18 5v14"/></svg>
+                            <div class="neu-inset-sm w-10 h-10 rounded-xl text-emerald-500 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 5v11"/><path d="M12 5v6"/><path d="M18 5v14"/></svg>
                             </div>
                             <div class="overflow-hidden">
                                 <div class="flex items-center gap-2">
-                                    <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">JurnalTim</h4>
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-mono text-slate-400 dark:text-zinc-400 bg-slate-200/50 dark:bg-zinc-800">SaaS & Kolaborasi</span>
+                                    <h4 class="text-xs font-lato font-bold text-slate-800 dark:text-white">JurnalTim</h4>
+                                    <span class="neu-inset-sm px-2 py-0.5 rounded text-[10px] font-mono font-medium text-slate-600 dark:text-zinc-300">SaaS & Kolaborasi</span>
                                 </div>
                                 <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-1 truncate">
                                     Manajemen proyek ringan dengan kanban dan timeline.
                                 </p>
                             </div>
                         </div>
-                        <div class="text-slate-400 dark:text-zinc-500 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        <div class="neu-inset-sm w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-500 shrink-0">
+                            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                         </div>
                     </div>
                 </a>
 
-                <a href="https://example.com/tokokita" target="_blank" rel="noopener noreferrer" class="app-card group block p-3.5 rounded-2xl bg-slate-50/80 dark:bg-darkcard border border-slate-200/80 dark:border-darkborder hover:border-emerald-500/40 dark:hover:border-emerald-500/40 hover:bg-white dark:hover:bg-darkcardhover transition-all">
+                <a href="https://example.com/tokokita" target="_blank" rel="noopener noreferrer" class="app-card neu-card block p-3.5 rounded-2xl">
                     <div class="flex items-center justify-between gap-3">
                         <div class="flex items-center gap-3 overflow-hidden">
-                            <div class="w-9 h-9 rounded-xl bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700/60 text-emerald-500 flex items-center justify-center shrink-0">
-                                <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                            <div class="neu-inset-sm w-10 h-10 rounded-xl text-emerald-500 flex items-center justify-center shrink-0">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
                             </div>
                             <div class="overflow-hidden">
                                 <div class="flex items-center gap-2">
-                                    <h4 class="text-xs font-bold text-slate-900 dark:text-white group-hover:text-emerald-500 transition-colors">TokoKita</h4>
-                                    <span class="px-2 py-0.5 rounded text-[10px] font-mono text-slate-400 dark:text-zinc-400 bg-slate-200/50 dark:bg-zinc-800">E-commerce</span>
+                                    <h4 class="text-xs font-lato font-bold text-slate-800 dark:text-white">TokoKita</h4>
+                                    <span class="neu-inset-sm px-2 py-0.5 rounded text-[10px] font-mono font-medium text-slate-600 dark:text-zinc-300">E-commerce</span>
                                 </div>
                                 <p class="text-[11px] text-slate-500 dark:text-zinc-400 mt-1 truncate">
                                     Storefront headless dengan checkout satu halaman.
                                 </p>
                             </div>
                         </div>
-                        <div class="text-slate-400 dark:text-zinc-500 group-hover:text-emerald-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all shrink-0">
-                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                        <div class="neu-inset-sm w-7 h-7 rounded-full flex items-center justify-center text-slate-400 dark:text-zinc-500 shrink-0">
+                            <svg class="w-3.5 h-3.5 text-slate-500 dark:text-zinc-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
                         </div>
                     </div>
                 </a>
             </div>
 
-            <div class="px-5 py-3 border-t border-slate-100 dark:border-darkborder/60 flex items-center justify-between text-[10px] text-slate-400 dark:text-zinc-500 shrink-0">
+            <div class="pt-3 border-t border-slate-300/40 dark:border-zinc-800 flex items-center justify-between text-[10px] text-slate-400 dark:text-zinc-500 shrink-0 font-lato">
                 <span>Terakhir diperbarui Januari 2026</span>
                 <span class="font-mono">↵ ESC untuk menutup</span>
             </div>
