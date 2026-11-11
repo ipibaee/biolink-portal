@@ -73,6 +73,9 @@ class Storage {
             sort_order INTEGER DEFAULT 0
         )");
 
+        // Auto-aktifkan sosmed yang sebelumnya tersimpan nonaktif
+        self::$pdo->exec("UPDATE socials SET is_active = 1 WHERE is_active = 0");
+
         $stmt = self::$pdo->query("SELECT COUNT(*) as cnt FROM settings");
         if ($stmt->fetch()['cnt'] == 0) {
             self::seedInitialData();
@@ -319,6 +322,11 @@ class Storage {
         } else {
             $data = json_decode(@file_get_contents(JSON_FILE), true);
             $socials = $data['socials'] ?? [];
+            foreach ($socials as &$soc) {
+                if (!isset($soc['is_active']) || $soc['is_active'] === 0) {
+                    $soc['is_active'] = 1;
+                }
+            }
             if ($onlyActive) {
                 $socials = array_filter($socials, fn($item) => !empty($item['is_active']));
             }

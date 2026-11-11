@@ -213,7 +213,7 @@ foreach ($apps as $app) {
 
         <!-- CIRCULAR SOCIAL BUTTONS ROW (Bulat-bulat di bagian bawah) -->
         <?php if (!empty($socials)): ?>
-            <div class="w-full flex items-center justify-center gap-3 mb-7">
+            <div class="w-full flex items-center justify-center gap-3 mb-7 flex-wrap">
                 <?php foreach ($socials as $soc): ?>
                     <a href="<?= htmlspecialchars($soc['url']) ?>" target="_blank" rel="noopener noreferrer" title="<?= htmlspecialchars($soc['title']) ?>" class="w-10 h-10 rounded-full bg-white dark:bg-darkcard border border-slate-200 dark:border-darkborder text-slate-600 dark:text-zinc-400 hover:text-emerald-500 dark:hover:text-emerald-400 hover:border-emerald-500/40 hover:scale-110 transition-all duration-200 flex items-center justify-center shadow-sm">
                         <?= render_icon($soc['icon'], 'w-4 h-4') ?>

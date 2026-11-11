@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'url' => trim($_POST['url'] ?? ''),
             'icon' => trim($_POST['icon'] ?? 'instagram'),
             'sort_order' => (int)($_POST['sort_order'] ?? 0),
-            'is_active' => isset($_POST['is_active']) ? 1 : 0
+            'is_active' => isset($_POST['is_active']) ? 1 : 1
         ];
         Storage::saveSocial($data, $id);
         $message = $id ? 'Tombol sosmed berhasil diperbarui!' : 'Tombol sosmed berhasil ditambahkan!';
@@ -589,6 +589,11 @@ $socials = Storage::getSocials(false);
                     <input type="text" name="url" id="social_url" required placeholder="https://instagram.com/username" class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-darkcardalt border border-slate-200 dark:border-darkborder text-xs focus:outline-none">
                 </div>
 
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" name="is_active" id="social_active" value="1" checked class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                    <label for="social_active" class="text-xs text-slate-600 dark:text-zinc-300">Tampilkan tombol sosmed ini di halaman utama</label>
+                </div>
+
                 <div class="pt-3 flex justify-end gap-2">
                     <button type="button" onclick="closeSocialModal()" class="px-4 py-2 rounded-xl text-xs bg-slate-200 dark:bg-zinc-800">Batal</button>
                     <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white">Simpan</button>
@@ -667,6 +672,7 @@ $socials = Storage::getSocials(false);
             document.getElementById('social_title').value = '';
             document.getElementById('social_url').value = '';
             document.getElementById('social_icon').value = 'instagram';
+            document.getElementById('social_active').checked = true;
             socialModal.classList.remove('opacity-0', 'pointer-events-none');
         }
         function editSocial(soc) {
@@ -675,6 +681,7 @@ $socials = Storage::getSocials(false);
             document.getElementById('social_title').value = soc.title;
             document.getElementById('social_url').value = soc.url;
             document.getElementById('social_icon').value = soc.icon || 'instagram';
+            document.getElementById('social_active').checked = (soc.is_active == 1 || soc.is_active === undefined);
             socialModal.classList.remove('opacity-0', 'pointer-events-none');
         }
         function closeSocialModal() { socialModal.classList.add('opacity-0', 'pointer-events-none'); }
