@@ -3,6 +3,10 @@ data/*.sqlite
 data/*.sqlite-journal
 data/*.json
 
+# Uploaded user images
+uploads/*
+!uploads/.gitkeep
+
 # Node / OS files
 .DS_Store
 Thumbs.db

@@ -1,19 +1,21 @@
 <?php
 /**
  * Database & Data Storage Engine
- * Menggunakan SQLite (PDO) jika tersedia, dengan auto-fallback ke JSON file
- * sehingga 100% kompatibel di berbagai konfigurasi aaPanel / Apache / Nginx.
+ * Mendukung SQLite (PDO) dengan auto-fallback ke JSON file.
  */
 
 define('DATA_DIR', __DIR__ . '/data');
+define('UPLOADS_DIR', __DIR__ . '/uploads');
 define('SQLITE_FILE', DATA_DIR . '/database.sqlite');
 define('JSON_FILE', DATA_DIR . '/data.json');
 
 if (!is_dir(DATA_DIR)) {
-    mkdir(DATA_DIR, 0755, true);
+    @mkdir(DATA_DIR, 0777, true);
+}
+if (!is_dir(UPLOADS_DIR)) {
+    @mkdir(UPLOADS_DIR, 0777, true);
 }
 
-// Inisialisasi Storage Engine
 class Storage {
     private static $useSqlite = false;
     private static $pdo = null;
@@ -35,13 +37,11 @@ class Storage {
     }
 
     private static function createTables() {
-        // Tabel Settings (Profile & Admin)
         self::$pdo->exec("CREATE TABLE IF NOT EXISTS settings (
             key TEXT PRIMARY KEY,
             value TEXT
         )");
 
-        // Tabel Links Utama
         self::$pdo->exec("CREATE TABLE IF NOT EXISTS links (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             title TEXT NOT NULL,
@@ -52,7 +52,6 @@ class Storage {
             sort_order INTEGER DEFAULT 0
         )");
 
-        // Tabel Aplikasi & Sistem (Modal Showcase)
         self::$pdo->exec("CREATE TABLE IF NOT EXISTS apps (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
@@ -65,7 +64,15 @@ class Storage {
             sort_order INTEGER DEFAULT 0
         )");
 
-        // Cek data awal
+        self::$pdo->exec("CREATE TABLE IF NOT EXISTS socials (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            title TEXT NOT NULL,
+            url TEXT NOT NULL,
+            icon TEXT DEFAULT 'globe',
+            is_active INTEGER DEFAULT 1,
+            sort_order INTEGER DEFAULT 0
+        )");
+
         $stmt = self::$pdo->query("SELECT COUNT(*) as cnt FROM settings");
         if ($stmt->fetch()['cnt'] == 0) {
             self::seedInitialData();
@@ -76,13 +83,13 @@ class Storage {
         $defaultPassword = password_hash('admin123', PASSWORD_BCRYPT);
         $settings = [
             'admin_password' => $defaultPassword,
-            'name' => 'Rifki Figianto, S.Kom.',
-            'title' => 'Full-Stack Developer & Tech Enthusiast',
-            'bio' => 'Membangun aplikasi web interaktif, arsitektur cloud, dan solusi otomatisasi yang elegan serta berkinerja tinggi.',
-            'location' => 'Indonesia',
+            'name' => 'Raka Adiputra, S.Kom.',
+            'title' => 'Full-Stack Developer',
+            'bio' => 'Saya merancang dan membangun produk digital end-to-end — dari arsitektur backend sampai detail antarmuka. Terbuka untuk kolaborasi jangka panjang.',
+            'location' => 'Jakarta, Indonesia • GMT+7',
             'status_text' => 'Available for Projects',
             'avatar_url' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
-            'domain_badge' => 'PORTAL RESMI'
+            'domain_badge' => 'Available for Projects'
         ];
 
         foreach ($settings as $k => $v) {
@@ -90,12 +97,12 @@ class Storage {
             $stmt->execute([':k' => $k, ':v' => $v]);
         }
 
-        // Default Links
         $links = [
-            ['title' => 'LinkedIn Profile', 'description' => 'Koneksi profesional, riwayat karier & portfolio kerja', 'url' => 'https://linkedin.com', 'icon' => 'linkedin', 'sort_order' => 1],
-            ['title' => 'GitHub Repositories', 'description' => 'Source code, eksperimen open-source & kontribusi', 'url' => 'https://github.com', 'icon' => 'github', 'sort_order' => 2],
-            ['title' => 'Hubungi via WhatsApp', 'description' => '+62 812-3456-7890 (Tanya kerja sama & respon cepat)', 'url' => 'https://wa.me/6281234567890?text=Halo,%20saya%20menghubungi%20lewat%20website%20portal', 'icon' => 'whatsapp', 'sort_order' => 3],
-            ['title' => 'Kirim Email Langsung', 'description' => 'Kontak formal untuk penawaran proyek & konsultasi', 'url' => 'mailto:yourname@example.com', 'icon' => 'mail', 'sort_order' => 4],
+            ['title' => 'WhatsApp', 'description' => 'Chat langsung — respon cepat', 'url' => 'https://wa.me/6281234567890?text=Halo%20Raka,%20saya%20tertarik%20bekerja%20sama', 'icon' => 'whatsapp', 'sort_order' => 1],
+            ['title' => 'LinkedIn', 'description' => 'Profil profesional & pengalaman', 'url' => 'https://linkedin.com', 'icon' => 'linkedin', 'sort_order' => 2],
+            ['title' => 'GitHub Repositories', 'description' => 'Kode sumber & eksperimen terbuka', 'url' => 'https://github.com', 'icon' => 'github', 'sort_order' => 3],
+            ['title' => 'Credly Certificates', 'description' => 'Sertifikat & badge terverifikasi', 'url' => 'https://credly.com', 'icon' => 'award', 'sort_order' => 4],
+            ['title' => 'Email', 'description' => 'raka@adiputra.dev', 'url' => 'mailto:raka@adiputra.dev', 'icon' => 'mail', 'sort_order' => 5],
         ];
 
         foreach ($links as $l) {
@@ -103,17 +110,29 @@ class Storage {
             $stmt->execute($l);
         }
 
-        // Default Apps Showcase
         $apps = [
-            ['name' => 'CV AI Generator', 'category' => 'Artificial Intelligence', 'description' => 'Aplikasi pembuat resume profesional berbasis AI dengan analisis skor lolos ATS otomatis.', 'url' => 'https://example.com/cv-ai', 'badge' => 'Live', 'icon' => 'sparkles', 'sort_order' => 1],
-            ['name' => 'CuacaAI Monitoring', 'category' => 'Data & Forecasting', 'description' => 'Dashboard prakiraan cuaca satelit presisi tinggi dengan integrasi open data.', 'url' => 'https://example.com/cuaca-ai', 'badge' => 'Live', 'icon' => 'cloud', 'sort_order' => 2],
-            ['name' => 'Sistem Pendukung Keputusan Desa', 'category' => 'Web App', 'description' => 'Platform transparansi evaluasi program desa menggunakan metode multi-kriteria.', 'url' => 'https://example.com/spk-desa', 'badge' => 'Live', 'icon' => 'layout-grid', 'sort_order' => 3],
-            ['name' => 'DSS RK Business Analytics', 'category' => 'Enterprise System', 'description' => 'Sistem pendukung keputusan analitik penjualan dan peramalan inventori stok.', 'url' => 'https://example.com/dss-rk', 'badge' => 'Dev', 'icon' => 'bar-chart', 'sort_order' => 4],
+            ['name' => 'KasirKu', 'category' => 'POS & Kasir', 'description' => 'Sistem kasir multi-outlet dengan laporan penjualan real-time.', 'url' => 'https://example.com/kasirku', 'badge' => 'Live', 'icon' => 'store', 'sort_order' => 1],
+            ['name' => 'SiHadir', 'category' => 'HR & Absensi', 'description' => 'Absensi QR + geofencing untuk 200+ karyawan lapangan.', 'url' => 'https://example.com/sihadir', 'badge' => 'Live', 'icon' => 'qr-code', 'sort_order' => 2],
+            ['name' => 'JurnalTim', 'category' => 'SaaS & Kolaborasi', 'description' => 'Manajemen proyek ringan dengan kanban dan timeline.', 'url' => 'https://example.com/jurnaltim', 'badge' => 'Live', 'icon' => 'kanban', 'sort_order' => 3],
+            ['name' => 'TokoKita', 'category' => 'E-commerce', 'description' => 'Storefront headless dengan checkout satu halaman.', 'url' => 'https://example.com/tokokita', 'badge' => 'Live', 'icon' => 'shopping-bag', 'sort_order' => 4],
         ];
 
         foreach ($apps as $a) {
             $stmt = self::$pdo->prepare("INSERT INTO apps (name, category, description, url, badge, icon, sort_order) VALUES (:name, :category, :description, :url, :badge, :icon, :sort_order)");
             $stmt->execute($a);
+        }
+
+        $socials = [
+            ['title' => 'Instagram', 'url' => 'https://instagram.com', 'icon' => 'instagram', 'sort_order' => 1],
+            ['title' => 'GitHub', 'url' => 'https://github.com', 'icon' => 'github', 'sort_order' => 2],
+            ['title' => 'LinkedIn', 'url' => 'https://linkedin.com', 'icon' => 'linkedin', 'sort_order' => 3],
+            ['title' => 'YouTube', 'url' => 'https://youtube.com', 'icon' => 'youtube', 'sort_order' => 4],
+            ['title' => 'TikTok', 'url' => 'https://tiktok.com', 'icon' => 'tiktok', 'sort_order' => 5],
+        ];
+
+        foreach ($socials as $s) {
+            $stmt = self::$pdo->prepare("INSERT INTO socials (title, url, icon, sort_order) VALUES (:title, :url, :icon, :sort_order)");
+            $stmt->execute($s);
         }
     }
 
@@ -123,32 +142,38 @@ class Storage {
             $initial = [
                 'settings' => [
                     'admin_password' => $defaultPassword,
-                    'name' => 'Rifki Figianto, S.Kom.',
-                    'title' => 'Full-Stack Developer & Tech Enthusiast',
-                    'bio' => 'Membangun aplikasi web interaktif, arsitektur cloud, dan solusi otomatisasi yang elegan serta berkinerja tinggi.',
-                    'location' => 'Indonesia',
+                    'name' => 'Raka Adiputra, S.Kom.',
+                    'title' => 'Full-Stack Developer',
+                    'bio' => 'Saya merancang dan membangun produk digital end-to-end — dari arsitektur backend sampai detail antarmuka. Terbuka untuk kolaborasi jangka panjang.',
+                    'location' => 'Jakarta, Indonesia • GMT+7',
                     'status_text' => 'Available for Projects',
                     'avatar_url' => 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&auto=format&fit=crop&q=80',
-                    'domain_badge' => 'PORTAL RESMI'
+                    'domain_badge' => 'Available for Projects'
                 ],
                 'links' => [
-                    ['id' => 1, 'title' => 'LinkedIn Profile', 'description' => 'Koneksi profesional, riwayat karier & portfolio kerja', 'url' => 'https://linkedin.com', 'icon' => 'linkedin', 'is_active' => 1, 'sort_order' => 1],
-                    ['id' => 2, 'title' => 'GitHub Repositories', 'description' => 'Source code, eksperimen open-source & kontribusi', 'url' => 'https://github.com', 'icon' => 'github', 'is_active' => 1, 'sort_order' => 2],
-                    ['id' => 3, 'title' => 'Hubungi via WhatsApp', 'description' => '+62 812-3456-7890 (Tanya kerja sama & respon cepat)', 'url' => 'https://wa.me/6281234567890?text=Halo,%20saya%20menghubungi%20lewat%20website%20portal', 'icon' => 'whatsapp', 'is_active' => 1, 'sort_order' => 3],
-                    ['id' => 4, 'title' => 'Kirim Email Langsung', 'description' => 'Kontak formal untuk penawaran proyek & konsultasi', 'url' => 'mailto:yourname@example.com', 'icon' => 'mail', 'is_active' => 1, 'sort_order' => 4],
+                    ['id' => 1, 'title' => 'WhatsApp', 'description' => 'Chat langsung — respon cepat', 'url' => 'https://wa.me/6281234567890?text=Halo%20Raka,%20saya%20tertarik%20bekerja%20sama', 'icon' => 'whatsapp', 'is_active' => 1, 'sort_order' => 1],
+                    ['id' => 2, 'title' => 'LinkedIn', 'description' => 'Profil profesional & pengalaman', 'url' => 'https://linkedin.com', 'icon' => 'linkedin', 'is_active' => 1, 'sort_order' => 2],
+                    ['id' => 3, 'title' => 'GitHub Repositories', 'description' => 'Kode sumber & eksperimen terbuka', 'url' => 'https://github.com', 'icon' => 'github', 'is_active' => 1, 'sort_order' => 3],
+                    ['id' => 4, 'title' => 'Credly Certificates', 'description' => 'Sertifikat & badge terverifikasi', 'url' => 'https://credly.com', 'icon' => 'award', 'is_active' => 1, 'sort_order' => 4],
+                    ['id' => 5, 'title' => 'Email', 'description' => 'raka@adiputra.dev', 'url' => 'mailto:raka@adiputra.dev', 'icon' => 'mail', 'is_active' => 1, 'sort_order' => 5],
                 ],
                 'apps' => [
-                    ['id' => 1, 'name' => 'CV AI Generator', 'category' => 'Artificial Intelligence', 'description' => 'Aplikasi pembuat resume profesional berbasis AI dengan analisis skor lolos ATS otomatis.', 'url' => 'https://example.com/cv-ai', 'badge' => 'Live', 'icon' => 'sparkles', 'is_active' => 1, 'sort_order' => 1],
-                    ['id' => 2, 'name' => 'CuacaAI Monitoring', 'category' => 'Data & Forecasting', 'description' => 'Dashboard prakiraan cuaca satelit presisi tinggi dengan integrasi open data.', 'url' => 'https://example.com/cuaca-ai', 'badge' => 'Live', 'icon' => 'cloud', 'is_active' => 1, 'sort_order' => 2],
-                    ['id' => 3, 'name' => 'Sistem Pendukung Keputusan Desa', 'category' => 'Web App', 'description' => 'Platform transparansi evaluasi program desa menggunakan metode multi-kriteria.', 'url' => 'https://example.com/spk-desa', 'badge' => 'Live', 'icon' => 'layout-grid', 'is_active' => 1, 'sort_order' => 3],
-                    ['id' => 4, 'name' => 'DSS RK Business Analytics', 'category' => 'Enterprise System', 'description' => 'Sistem pendukung keputusan analitik penjualan dan peramalan inventori stok.', 'url' => 'https://example.com/dss-rk', 'badge' => 'Dev', 'icon' => 'bar-chart', 'is_active' => 1, 'sort_order' => 4],
+                    ['id' => 1, 'name' => 'KasirKu', 'category' => 'POS & Kasir', 'description' => 'Sistem kasir multi-outlet dengan laporan penjualan real-time.', 'url' => 'https://example.com/kasirku', 'badge' => 'Live', 'icon' => 'store', 'is_active' => 1, 'sort_order' => 1],
+                    ['id' => 2, 'name' => 'SiHadir', 'category' => 'HR & Absensi', 'description' => 'Absensi QR + geofencing untuk 200+ karyawan lapangan.', 'url' => 'https://example.com/sihadir', 'badge' => 'Live', 'icon' => 'qr-code', 'is_active' => 1, 'sort_order' => 2],
+                    ['id' => 3, 'name' => 'JurnalTim', 'category' => 'SaaS & Kolaborasi', 'description' => 'Manajemen proyek ringan dengan kanban dan timeline.', 'url' => 'https://example.com/jurnaltim', 'badge' => 'Live', 'icon' => 'kanban', 'is_active' => 1, 'sort_order' => 3],
+                    ['id' => 4, 'name' => 'TokoKita', 'category' => 'E-commerce', 'description' => 'Storefront headless dengan checkout satu halaman.', 'url' => 'https://example.com/tokokita', 'badge' => 'Live', 'icon' => 'shopping-bag', 'is_active' => 1, 'sort_order' => 4],
+                ],
+                'socials' => [
+                    ['id' => 1, 'title' => 'Instagram', 'url' => 'https://instagram.com', 'icon' => 'instagram', 'is_active' => 1, 'sort_order' => 1],
+                    ['id' => 2, 'title' => 'GitHub', 'url' => 'https://github.com', 'icon' => 'github', 'is_active' => 1, 'sort_order' => 2],
+                    ['id' => 3, 'title' => 'LinkedIn', 'url' => 'https://linkedin.com', 'icon' => 'linkedin', 'is_active' => 1, 'sort_order' => 3],
+                    ['id' => 4, 'title' => 'YouTube', 'url' => 'https://youtube.com', 'icon' => 'youtube', 'is_active' => 1, 'sort_order' => 4],
+                    ['id' => 5, 'title' => 'TikTok', 'url' => 'https://tiktok.com', 'icon' => 'tiktok', 'is_active' => 1, 'sort_order' => 5],
                 ]
             ];
-            file_put_contents(JSON_FILE, json_encode($initial, JSON_PRETTY_PRINT));
+            @file_put_contents(JSON_FILE, json_encode($initial, JSON_PRETTY_PRINT));
         }
     }
-
-    // --- API HELPER METHODS ---
 
     public static function getSettings() {
         if (self::$useSqlite) {
@@ -159,7 +184,7 @@ class Storage {
             }
             return $res;
         } else {
-            $data = json_decode(file_get_contents(JSON_FILE), true);
+            $data = json_decode(@file_get_contents(JSON_FILE), true);
             return $data['settings'] ?? [];
         }
     }
@@ -171,11 +196,11 @@ class Storage {
                 $stmt->execute([':key' => $k, ':value' => $v]);
             }
         } else {
-            $data = json_decode(file_get_contents(JSON_FILE), true);
+            $data = json_decode(@file_get_contents(JSON_FILE), true);
             foreach ($settings as $k => $v) {
                 $data['settings'][$k] = $v;
             }
-            file_put_contents(JSON_FILE, json_encode($data, JSON_PRETTY_PRINT));
+            @file_put_contents(JSON_FILE, json_encode($data, JSON_PRETTY_PRINT));
         }
     }
 
@@ -184,7 +209,7 @@ class Storage {
             $sql = "SELECT * FROM links " . ($onlyActive ? "WHERE is_active = 1 " : "") . "ORDER BY sort_order ASC, id ASC";
             return self::$pdo->query($sql)->fetchAll();
         } else {
-            $data = json_decode(file_get_contents(JSON_FILE), true);
+            $data = json_decode(@file_get_contents(JSON_FILE), true);
             $links = $data['links'] ?? [];
             if ($onlyActive) {
                 $links = array_filter($links, fn($item) => !empty($item['is_active']));
@@ -205,7 +230,7 @@ class Storage {
                 $stmt->execute($data);
             }
         } else {
-            $json = json_decode(file_get_contents(JSON_FILE), true);
+            $json = json_decode(@file_get_contents(JSON_FILE), true);
             if ($id) {
                 foreach ($json['links'] as &$link) {
                     if ($link['id'] == $id) {
@@ -218,7 +243,7 @@ class Storage {
                 $data['id'] = $nextId;
                 $json['links'][] = $data;
             }
-            file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
+            @file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
         }
     }
 
@@ -227,9 +252,9 @@ class Storage {
             $stmt = self::$pdo->prepare("DELETE FROM links WHERE id = :id");
             $stmt->execute([':id' => $id]);
         } else {
-            $json = json_decode(file_get_contents(JSON_FILE), true);
+            $json = json_decode(@file_get_contents(JSON_FILE), true);
             $json['links'] = array_values(array_filter($json['links'], fn($l) => $l['id'] != $id));
-            file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
+            @file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
         }
     }
 
@@ -238,7 +263,7 @@ class Storage {
             $sql = "SELECT * FROM apps " . ($onlyActive ? "WHERE is_active = 1 " : "") . "ORDER BY sort_order ASC, id ASC";
             return self::$pdo->query($sql)->fetchAll();
         } else {
-            $data = json_decode(file_get_contents(JSON_FILE), true);
+            $data = json_decode(@file_get_contents(JSON_FILE), true);
             $apps = $data['apps'] ?? [];
             if ($onlyActive) {
                 $apps = array_filter($apps, fn($item) => !empty($item['is_active']));
@@ -259,7 +284,7 @@ class Storage {
                 $stmt->execute($data);
             }
         } else {
-            $json = json_decode(file_get_contents(JSON_FILE), true);
+            $json = json_decode(@file_get_contents(JSON_FILE), true);
             if ($id) {
                 foreach ($json['apps'] as &$app) {
                     if ($app['id'] == $id) {
@@ -272,7 +297,7 @@ class Storage {
                 $data['id'] = $nextId;
                 $json['apps'][] = $data;
             }
-            file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
+            @file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
         }
     }
 
@@ -281,12 +306,65 @@ class Storage {
             $stmt = self::$pdo->prepare("DELETE FROM apps WHERE id = :id");
             $stmt->execute([':id' => $id]);
         } else {
-            $json = json_decode(file_get_contents(JSON_FILE), true);
+            $json = json_decode(@file_get_contents(JSON_FILE), true);
             $json['apps'] = array_values(array_filter($json['apps'], fn($a) => $a['id'] != $id));
-            file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
+            @file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
+        }
+    }
+
+    public static function getSocials($onlyActive = true) {
+        if (self::$useSqlite) {
+            $sql = "SELECT * FROM socials " . ($onlyActive ? "WHERE is_active = 1 " : "") . "ORDER BY sort_order ASC, id ASC";
+            return self::$pdo->query($sql)->fetchAll();
+        } else {
+            $data = json_decode(@file_get_contents(JSON_FILE), true);
+            $socials = $data['socials'] ?? [];
+            if ($onlyActive) {
+                $socials = array_filter($socials, fn($item) => !empty($item['is_active']));
+            }
+            usort($socials, fn($a, $b) => ($a['sort_order'] ?? 0) <=> ($b['sort_order'] ?? 0));
+            return array_values($socials);
+        }
+    }
+
+    public static function saveSocial($data, $id = null) {
+        if (self::$useSqlite) {
+            if ($id) {
+                $stmt = self::$pdo->prepare("UPDATE socials SET title = :title, url = :url, icon = :icon, is_active = :is_active, sort_order = :sort_order WHERE id = :id");
+                $data['id'] = $id;
+                $stmt->execute($data);
+            } else {
+                $stmt = self::$pdo->prepare("INSERT INTO socials (title, url, icon, is_active, sort_order) VALUES (:title, :url, :icon, :is_active, :sort_order)");
+                $stmt->execute($data);
+            }
+        } else {
+            $json = json_decode(@file_get_contents(JSON_FILE), true);
+            if ($id) {
+                foreach ($json['socials'] as &$soc) {
+                    if ($soc['id'] == $id) {
+                        $soc = array_merge($soc, $data, ['id' => (int)$id]);
+                        break;
+                    }
+                }
+            } else {
+                $nextId = empty($json['socials']) ? 1 : max(array_column($json['socials'], 'id')) + 1;
+                $data['id'] = $nextId;
+                $json['socials'][] = $data;
+            }
+            @file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
+        }
+    }
+
+    public static function deleteSocial($id) {
+        if (self::$useSqlite) {
+            $stmt = self::$pdo->prepare("DELETE FROM socials WHERE id = :id");
+            $stmt->execute([':id' => $id]);
+        } else {
+            $json = json_decode(@file_get_contents(JSON_FILE), true);
+            $json['socials'] = array_values(array_filter($json['socials'], fn($s) => $s['id'] != $id));
+            @file_put_contents(JSON_FILE, json_encode($json, JSON_PRETTY_PRINT));
         }
     }
 }
 
-// Inisialisasi otomatis
 Storage::init();
