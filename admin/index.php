@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'badge' => trim($_POST['badge'] ?? 'Live'),
             'icon' => trim($_POST['icon'] ?? 'layout-grid'),
             'sort_order' => (int)($_POST['sort_order'] ?? 0),
-            'is_active' => isset($_POST['is_active']) ? 1 : 0
+            'is_active' => isset($_POST['is_active']) ? 1 : 1
         ];
         Storage::saveApp($data, $id);
         $message = $id ? 'Aplikasi berhasil diperbarui!' : 'Aplikasi baru berhasil ditambahkan!';
@@ -549,6 +549,11 @@ $socials = Storage::getSocials(false);
                     <input type="text" name="url" id="app_url" required placeholder="https://..." class="w-full px-3 py-2 rounded-xl bg-slate-50 dark:bg-darkcardalt border border-slate-200 dark:border-darkborder text-xs focus:outline-none">
                 </div>
 
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" name="is_active" id="app_active" value="1" checked class="rounded border-slate-300 text-emerald-600 focus:ring-emerald-500">
+                    <label for="app_active" class="text-xs text-slate-600 dark:text-zinc-300">Tampilkan aplikasi ini di halaman utama</label>
+                </div>
+
                 <div class="pt-3 flex justify-end gap-2">
                     <button type="button" onclick="closeAppModal()" class="px-4 py-2 rounded-xl text-xs bg-slate-200 dark:bg-zinc-800">Batal</button>
                     <button type="submit" class="px-4 py-2 rounded-xl text-xs font-semibold bg-emerald-600 text-white">Simpan</button>
@@ -651,6 +656,7 @@ $socials = Storage::getSocials(false);
             document.getElementById('app_desc').value = '';
             document.getElementById('app_url').value = '';
             document.getElementById('app_icon').value = 'store';
+            document.getElementById('app_active').checked = true;
             appModal.classList.remove('opacity-0', 'pointer-events-none');
         }
         function editApp(app) {
@@ -661,6 +667,7 @@ $socials = Storage::getSocials(false);
             document.getElementById('app_desc').value = app.description || '';
             document.getElementById('app_url').value = app.url;
             document.getElementById('app_icon').value = app.icon || 'store';
+            document.getElementById('app_active').checked = (app.is_active == 1 || app.is_active === undefined);
             appModal.classList.remove('opacity-0', 'pointer-events-none');
         }
         function closeAppModal() { appModal.classList.add('opacity-0', 'pointer-events-none'); }

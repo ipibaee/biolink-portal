@@ -283,7 +283,7 @@ class Storage {
                 $data['id'] = $id;
                 $stmt->execute($data);
             } else {
-                $stmt = self::$pdo->prepare("INSERT INTO apps (name, category, description, url, badge, icon, is_active, sort_order) VALUES (:name, :category, :description, :url, :badge, :icon, :sort_order)");
+                $stmt = self::$pdo->prepare("INSERT INTO apps (name, category, description, url, badge, icon, is_active, sort_order) VALUES (:name, :category, :description, :url, :badge, :icon, :is_active, :sort_order)");
                 $stmt->execute($data);
             }
         } else {
